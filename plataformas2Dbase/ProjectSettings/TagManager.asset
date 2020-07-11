@@ -12,6 +12,7 @@ TagManager:
   - enemigo
   - techo
   - pasillo
+  - "da\xF1os"
   layers:
   - Default
   - TransparentFX
