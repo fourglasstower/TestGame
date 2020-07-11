@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class personaje : MonoBehaviour {
+    public static Vector3 posicionactual;
    public static float invulneravilidad = 0;
     public static float tiempoinmune = 1;
     Vector3 posicion;
@@ -48,7 +49,17 @@ public class personaje : MonoBehaviour {
     public GameObject posalreves, posnormal;
     public string posactual = "normal";
     // Use this for initialization
+
+    //fases
+    string estadomomentanio="normal";
+    float guardarvelocidad = 0;
+    float guardarsalto = 0;
+    float guardararastrarse = 0;
     void Start () {
+        guardarvelocidad = velocidad;
+        guardarsalto = velocidadsalto;
+        guardararastrarse = velocidadagachada;
+
         maximosalto = altura;
         anim = animator.GetComponent<Animator>();
         velocidadnormal = velocidad;
@@ -56,6 +67,15 @@ public class personaje : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (vidas.estado == "lento")
+        { velocidad = guardarvelocidad / 2; }
+            if (estadomomentanio == "normal") { if (vidas.estado == "lento") {  velocidadsalto = guardarsalto / 2; velocidadagachada = guardararastrarse / 2; estadomomentanio = "lento"; } }
+        else
+        { if (vidas.estado == "normal") { velocidad = guardarvelocidad; velocidadsalto = guardarsalto; velocidadagachada = guardararastrarse; estadomomentanio = "normal"; } }
+       
+        
+
+        posicionactual = this.transform.position;
         invulnerable();
         brincorelog = brincorelog + 1 * Time.deltaTime;
         correr();
@@ -200,11 +220,16 @@ public class personaje : MonoBehaviour {
         caminando = "no";
         if (Input.GetKey(KeyCode.A))
         {
-            if (direcionactual=="ninguna") { direcionactual = "izquierda"; }
+            if (vidas.estado=="normal") { if (direcionactual == "ninguna") { direcionactual = "izquierda"; } }
+            if (vidas.estado == "lento") { if (direcionactual == "ninguna") { direcionactual = "izquierda"; } }
+            if (vidas.estado == "descontrol") { if (direcionactual == "ninguna") { direcionactual = "derecha"; } }
+
         }
         if (Input.GetKey(KeyCode.D))
         {
-            if (direcionactual == "ninguna") { direcionactual = "derecha"; }
+            if (vidas.estado == "normal") { if (direcionactual == "ninguna") { direcionactual = "derecha"; } }
+            if (vidas.estado == "lento") { if (direcionactual == "ninguna") { direcionactual = "derecha"; } }
+            if (vidas.estado == "descontrol") { if (direcionactual == "ninguna") { direcionactual = "izquierda"; } }
         }
         if (direcionactual=="izquierda")
         {
