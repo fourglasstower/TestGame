@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - piso
+  - pared
+  - paredizquierda
+  - paredderecha
+  - bala
+  - enemigo
+  - techo
+  - pasillo
   layers:
   - Default
   - TransparentFX

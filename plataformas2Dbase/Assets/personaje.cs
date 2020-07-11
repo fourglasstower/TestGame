@@ -3,74 +3,246 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class personaje : MonoBehaviour {
+    Vector3 posicion;
+    private Animator anim;
+    public GameObject animator;
     public float velocidad = 1;
+    float velocidadnormal=0;
+    public float velocidadagachada = 1;
     public float velocidadsalto = 1;
-    public GameObject iz,de;
+    public GameObject iz,de,iz2,de2;
     public string nombrecolision = "";
     public string activadorsalto = "caida";
-    public float contadorsalto = 0;
-    public float maximosalto = 3;
+    
+    public static float contadorsalto = 0;
+    public float altura = 0.5f;
+    public static float maximosalto = 3;
+    public string saltando = "si";
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    public string caminando = "no";
+    public static string activadorcorreriz = "si";
+    public static string activadorcorrerde = "si";
+
+    public GameObject colicionadorpos;
+    //codigo de las fases para el movimiento-----------
+    public string daños = "no";
+    public string instancia = "normal";
+    public string accion = "normal";
+
+    //-------------------------------------
+    float brincorelog = 0;
+    string direcionactual = "ninguna";
+
+    //bala----------
+    public GameObject bala;
+    public GameObject posbala;
+
+    //lllagachada
+    public static string activadoragachada = "no";
+    float contadoragachada = 0;
+    // Use this for initialization
+    void Start () {
+        maximosalto = altura;
+        anim = animator.GetComponent<Animator>();
+        velocidadnormal = velocidad;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (activadorsalto=="salto")
+        brincorelog = brincorelog + 1 * Time.deltaTime;
+        correr();
+         salto(); 
+        balasos();
+        agacharse();
+        //codigo de las fases para el movimiento-----------
+        if (daños=="si")
         {
-            if (contadorsalto < maximosalto) { salto(); }
-            if (contadorsalto >= maximosalto) { activadorsalto = "caida"; }
-
+           
         }
-        if (activadorsalto == "caida")
+        if (daños == "no")
         {
-            caida();
+            if (instancia == "arriba")
+            {
+                if (accion == "salto")
+                {
+                    anim.SetInteger("fase", 2);
+                }
+                if (accion == "caida")
+                {
+                    anim.SetInteger("fase", 3);
+                }
+                if (accion == "accion1")
+                {
 
+                }
+            }
+            if (instancia == "normal")
+            {
+                if (accion == "correr")
+                {
+                     anim.SetInteger("fase", 1); 
+                }
+                if (accion == "standby")
+                {
+                    anim.SetInteger("fase", 0);
+                }
+                if (accion == "accion1")
+                {
+
+                }
+            }
+            if (instancia == "abajo")
+            {
+                if (accion == "standby")
+                {
+                    anim.SetInteger("fase", 4);
+                }
+                if (accion == "correr")
+                {
+                    anim.SetInteger("fase", 5);
+                }
+            }
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-            this.transform.Translate(velocidad*Time.deltaTime, 0, 0);
-            this.transform.rotation = iz.transform.rotation;
 
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
+        //------------------------------------------------------
+        
+        
 
-            this.transform.Translate(velocidad * Time.deltaTime, 0, 0);
-            this.transform.rotation = de.transform.rotation;
-
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            if (activadorsalto=="normal") { contadorsalto = 0; activadorsalto = "salto"; }
-                
-
-        }
+        ///-----------------------------------------------------------------------------
+      
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag=="piso")
+        {
+            instancia = "normal";
+            activadorsalto = "si";
+            saltando = "no";
 
-        nombrecolision = other.name;
+            brincorelog = 0;
+            //reposisionamiento automatico----------------------------
+            posicion = this.transform.position;
+            posicion.y = other.transform.position.y+0.7f;
+            this.transform.position = posicion;
+        }
+
+        
+        //---------------------------------------------------
+
+        // nombrecolision = other.name;
     }
     private void OnTriggerExit(Collider other)
     {
 
-        nombrecolision = "salto";
+        if (other.tag == "piso")
+        {
+            activadorsalto = "no";
+            if (saltando == "no") { saltando = "si"; contadorsalto = maximosalto; }
+        }
+
+      
     }
 
     public void salto()
     {
+        
+            if (brincorelog>0.1)
+            {
+                if (activadorsalto == "si")
+                {
+                if (instancia=="normal")
+                {
+
+                    if (Input.GetKeyDown(KeyCode.W)) { contadorsalto = 0; saltando = "si"; }
+                    if (Input.GetKeyDown(KeyCode.K)) { contadorsalto = 0; saltando = "si"; }
+
+
+                }
+
+
+            }
+            }
+           
+
+
+        
         contadorsalto = contadorsalto + 1 * Time.deltaTime;
-        this.transform.Translate(0, velocidadsalto * Time.deltaTime, 0);
+
+        if (saltando == "si")
+        {
+            instancia = "arriba";
+            if (contadorsalto < maximosalto) { this.transform.Translate(0, velocidadsalto * Time.deltaTime, 0); accion = "salto"; } else { this.transform.Translate(0, -velocidadsalto * Time.deltaTime, 0); accion = "caida"; }
+            //  if (contadorsalto >= maximosalto) { activadorsalto = "caida"; }
+
+        }
+      
 
     }
-    public void caida()
+ 
+    public void correr()
     {
-        
-        this.transform.Translate(0, -velocidadsalto * Time.deltaTime, 0);
-        if (nombrecolision=="piso") { activadorsalto = "normal"; }
+
+        //caminar----------------------------------------------------------------------
+        caminando = "no";
+        if (Input.GetKey(KeyCode.A))
+        {
+            if (direcionactual=="ninguna") { direcionactual = "izquierda"; }
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            if (direcionactual == "ninguna") { direcionactual = "derecha"; }
+        }
+        if (direcionactual=="izquierda")
+        {
+            if (activadorcorreriz == "si") { this.transform.Translate(velocidad * Time.deltaTime, 0, 0); }
+            this.transform.rotation = iz.transform.rotation;
+            animator.transform.rotation = iz2.transform.rotation;
+            caminando = "si";
+        }
+        if (direcionactual == "derecha")
+        {
+            if (activadorcorrerde == "si") { this.transform.Translate(velocidad * Time.deltaTime, 0, 0); }
+            this.transform.rotation = de.transform.rotation;
+            animator.transform.rotation = de2.transform.rotation;
+            caminando = "si";
+        }
+              
+        direcionactual = "ninguna";
+
+        if (caminando == "si") { accion = "correr"; }
+        if (caminando == "no") { accion = "standby"; }
+        ///-----------------------------------------------------------------------
     }
+    public void balasos()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Instantiate(bala,posbala.transform.position,this.transform.rotation);
+
+        }
+    }
+    public void agacharse()
+    {
+        contadoragachada = contadoragachada + 1 * Time.deltaTime;
+        if (Input.GetKey(KeyCode.S))
+        {
+            if (instancia=="normal") { instancia = "abajo";  }
+            if (instancia=="abajo")
+            {
+                contadoragachada = 0; velocidad = velocidadagachada; activadoragachada = "si";
+                if (paredes.chekadorcolicion == "si") { activadorcorreriz = "si"; activadorcorrerde = "si"; }
+            }
+        }
+        if (instancia == "abajo")
+        {
+            if (paredes.chekadorcolicion=="no")
+            {
+                if (contadoragachada > 0.1f) { instancia = "normal"; velocidad = velocidadnormal; activadoragachada = "no"; }
+            }
+            
+        }
+       
+    }
+
 }
