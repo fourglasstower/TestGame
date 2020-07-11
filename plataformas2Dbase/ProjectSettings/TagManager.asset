@@ -13,6 +13,10 @@ TagManager:
   - techo
   - pasillo
   - "da\xF1os"
+  - plataforma
+  - cubomagico
+  - personaje
+  - laba
   layers:
   - Default
   - TransparentFX

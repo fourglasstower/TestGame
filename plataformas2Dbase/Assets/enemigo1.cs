@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class enemigo1 : MonoBehaviour {
     public float vida = 10;
+    string contacto = "no";
 	// Use this for initialization
 	void Start () {
 		
@@ -13,7 +14,7 @@ public class enemigo1 : MonoBehaviour {
     void Update()
     {
         if (vida<1) { Destroy(this.gameObject); }
-
+        if (contacto=="si") { if (personaje.invulneravilidad > personaje.tiempoinmune) { personaje.invulneravilidad = 0; vidas.vidaactual--; } }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -23,6 +24,21 @@ public class enemigo1 : MonoBehaviour {
             vida--;
         }
 
-
+        if (other.tag == "daños")
+        {
+            contacto = "si";
+           
+        }
     }
-}
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "daños")
+        {
+            contacto = "no";
+        }
+           
+    }
+
+
+ }

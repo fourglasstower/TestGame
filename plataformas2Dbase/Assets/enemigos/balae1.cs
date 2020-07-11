@@ -27,7 +27,8 @@ public class balae1 : MonoBehaviour {
 
         if (other.tag == "daños")
         {
-            if (contador < 2.9f) { contador = 3f; }
+            if (contador < 2.9f) { if (personaje.invulneravilidad>personaje.tiempoinmune) { personaje.invulneravilidad = 0; vidas.vidaactual--; } contador = 3f; }
+            
         }
 
 

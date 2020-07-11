@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class personaje : MonoBehaviour {
+   public static float invulneravilidad = 0;
+    public static float tiempoinmune = 1;
     Vector3 posicion;
     private Animator anim;
     public GameObject animator;
@@ -10,7 +12,7 @@ public class personaje : MonoBehaviour {
     float velocidadnormal=0;
     public float velocidadagachada = 1;
     public float velocidadsalto = 1;
-    public GameObject iz,de,iz2,de2;
+    public GameObject iz,de,iz2,de2,izal,deal,izal2,deal2;
     public string nombrecolision = "";
     public string activadorsalto = "caida";
     
@@ -40,6 +42,11 @@ public class personaje : MonoBehaviour {
     //lllagachada
     public static string activadoragachada = "no";
     float contadoragachada = 0;
+
+    //plataforma
+    public string activadorplataforma = "no";
+    public GameObject posalreves, posnormal;
+    public string posactual = "normal";
     // Use this for initialization
     void Start () {
         maximosalto = altura;
@@ -49,11 +56,13 @@ public class personaje : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        invulnerable();
         brincorelog = brincorelog + 1 * Time.deltaTime;
         correr();
          salto(); 
         balasos();
         agacharse();
+        plataformas();
         //codigo de las fases para el movimiento-----------
         if (daños=="si")
         {
@@ -123,11 +132,15 @@ public class personaje : MonoBehaviour {
             brincorelog = 0;
             //reposisionamiento automatico----------------------------
             posicion = this.transform.position;
-            posicion.y = other.transform.position.y+0.7f;
+            if (posactual=="normal") { posicion.y = other.transform.position.y + 0.7f; }
+            if (posactual == "alreves") { posicion.y = other.transform.position.y - 0.7f; }
+
             this.transform.position = posicion;
         }
 
-        
+        if (other.tag=="plataforma") { activadorplataforma = "si"; }
+        if (other.tag=="laba") { vidas.vidaactual = 0; }
+
         //---------------------------------------------------
 
         // nombrecolision = other.name;
@@ -141,7 +154,7 @@ public class personaje : MonoBehaviour {
             if (saltando == "no") { saltando = "si"; contadorsalto = maximosalto; }
         }
 
-      
+        if (other.tag == "plataforma") { activadorplataforma = "no";  }
     }
 
     public void salto()
@@ -196,15 +209,33 @@ public class personaje : MonoBehaviour {
         if (direcionactual=="izquierda")
         {
             if (activadorcorreriz == "si") { this.transform.Translate(velocidad * Time.deltaTime, 0, 0); }
-            this.transform.rotation = iz.transform.rotation;
-            animator.transform.rotation = iz2.transform.rotation;
+            if (posactual=="normal")
+            {
+                this.transform.rotation = iz.transform.rotation;
+                animator.transform.rotation = iz2.transform.rotation;
+            }
+            if (posactual == "alreves")
+            {
+                this.transform.rotation = izal.transform.rotation;
+                animator.transform.rotation = deal2.transform.rotation;
+            }
+
             caminando = "si";
         }
         if (direcionactual == "derecha")
         {
             if (activadorcorrerde == "si") { this.transform.Translate(velocidad * Time.deltaTime, 0, 0); }
-            this.transform.rotation = de.transform.rotation;
-            animator.transform.rotation = de2.transform.rotation;
+            if (posactual == "normal")
+            {
+                this.transform.rotation = de.transform.rotation;
+                animator.transform.rotation = de2.transform.rotation;
+            }
+            if (posactual == "alreves")
+            {
+                this.transform.rotation = deal.transform.rotation;
+                animator.transform.rotation = izal2.transform.rotation;
+            }
+
             caminando = "si";
         }
               
@@ -243,6 +274,51 @@ public class personaje : MonoBehaviour {
             
         }
        
+    }
+
+    public void plataformas()
+    {
+        
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+              if (activadorplataforma == "si")
+              {
+
+                if (posactual=="normal")
+                {
+                    this.transform.Translate(0, 5, 0);
+                    //accion = "salto";
+                    activadorplataforma = "no";
+                    posactual = "alreves";
+                    this.transform.rotation = posalreves.transform.rotation;
+                 
+                }
+              
+
+              }
+
+              if (activadorplataforma == "si")
+              {
+
+                
+                if (posactual == "alreves")
+                {
+                    this.transform.Translate(0, 5, 0);
+                   // accion = "salto";
+                    activadorplataforma = "no";
+                    posactual = "normal";
+                    this.transform.rotation = posnormal.transform.rotation;
+                   
+                }
+
+              }
+            }
+
+    }
+    void invulnerable()
+    {
+        invulneravilidad = invulneravilidad + 1 * Time.deltaTime;
+
     }
 
 }

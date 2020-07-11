@@ -17,27 +17,47 @@ public class enemigodetector : MonoBehaviour {
 
     public float velocidaddisparo=0.4f;
     float contadordisparo=0.3f;
-	// Use this for initialization
-	void Start () {
-		
+
+    public string tipo = "disparo";
+    public string pos = "normal";
+
+    float contadorlansarse=0;
+    public float velsalto = 0;
+    string checadorsalto = "no";
+    // Use this for initialization
+    void Start () {
+      
 	}
 	
 	// Update is called once per frame
 	void Update () {
        
         if (fase=="normal") { normal(); }
-        if (fase == "atacar") { atacar(); }
+        if (fase == "atacar")
+        {
+           if(tipo=="disparo") atacar();
+           if (tipo == "aventarse") aventarse();
+
+        }
 
     }
     private void OnTriggerEnter(Collider other)
     {
         detectado = other.name;
-        if (other.name=="personaje") { fase = "atacar"; }
+        if (other.name=="personaje")
+        {
+            fase = "atacar";
+            checadorsalto = "si";
+        }
     }
     private void OnTriggerExit(Collider other)
     {
-        
-        if (other.name == "personaje") { fase = "normal"; }
+
+           if (other.name == "personaje")
+           {
+            if (tipo=="disparo") { fase = "normal"; }
+            checadorsalto = "no";
+           }
     }
 
     void normal()
@@ -62,5 +82,20 @@ public class enemigodetector : MonoBehaviour {
         contadordisparo = contadordisparo + 1 * Time.deltaTime;
         if (contadordisparo>velocidaddisparo) { contadordisparo = 0; Instantiate(bala, basenemigo.transform.position, basenemigo.transform.rotation); }
         
+    }
+    void aventarse()
+    {
+        contadordisparo = contadordisparo + 1 * Time.deltaTime;
+        if (contadordisparo > velocidaddisparo)
+        {
+            
+            if (contadorlansarse <= 0.2f) { basenemigo.transform.Translate(0, velsalto * Time.deltaTime, 0); }
+            if (contadorlansarse > 0.2f) { basenemigo.transform.Translate(0, -velsalto * Time.deltaTime, 0); }
+
+            basenemigo.transform.Translate(velsalto * Time.deltaTime, 0, 0);
+            if (contadorlansarse >= 0.36f) { contadorlansarse = 0;  contadordisparo = 0;if (checadorsalto=="no") { fase = "normal"; }  }
+            contadorlansarse = contadorlansarse + 1 * Time.deltaTime;
+        }
+         
     }
 }
