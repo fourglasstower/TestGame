@@ -35,10 +35,10 @@ public class enemigodetector : MonoBehaviour {
         if (fase=="normal") { normal(); }
         if (fase == "atacar")
         {
-           if(tipo=="disparo") atacar2();
+           if(tipo=="disparo") atacar();
            if (tipo == "aventarse") aventarse();
             if (tipo == "aventarsealreves") aventarsealreves();
-            if (tipo == "disparo2") aventarsealreves();
+            if (tipo == "disparo2") atacar2();
 
         }
 
@@ -47,6 +47,11 @@ public class enemigodetector : MonoBehaviour {
     {
         detectado = other.name;
         if (other.name=="personaje")
+        {
+            fase = "atacar";
+            checadorsalto = "si";
+        }
+        if (other.name == "daños")
         {
             fase = "atacar";
             checadorsalto = "si";
@@ -60,6 +65,11 @@ public class enemigodetector : MonoBehaviour {
             if (tipo=="disparo") { fase = "normal"; }
             checadorsalto = "no";
            }
+        if (other.name == "daños")
+        {
+            if (tipo == "disparo") { fase = "normal"; }
+            checadorsalto = "no";
+        }
     }
 
     void normal()

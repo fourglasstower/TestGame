@@ -24,7 +24,7 @@ public class invocacionboss : MonoBehaviour {
         dir = (personaje.posicionactual - this.transform.position).normalized;
         this.transform.position = this.transform.position + (dir * velocidad) * Time.deltaTime;
 
-        if (contador > 15) { Destroy(this.gameObject); }
+        if (contador > 20) { Destroy(this.gameObject); }
 
         if (vida < 1) { Instantiate(corazon, this.transform.position, this.transform.rotation); Destroy(this.gameObject); }
     }
@@ -35,7 +35,7 @@ public class invocacionboss : MonoBehaviour {
 
         if (other.tag == "daños")
         {
-            if (contador < 14.9f) { if (personaje.invulneravilidad > personaje.tiempoinmune) { personaje.invulneravilidad = 0; vidas.vidaactual--; } contador = 15f; }
+            if (contador < 19.9f) { if (personaje.invulneravilidad > personaje.tiempoinmune) { personaje.invulneravilidad = 0; vidas.vidaactual--; } contador = 20f; }
 
         }
 
