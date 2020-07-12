@@ -60,7 +60,7 @@ public class personaje : MonoBehaviour {
     float guardararastrarse = 0;
     void Start () {
         scaleChange = dañoscolider.transform.localScale;
-
+        posactual = "normal";
 
         guardarvelocidad = velocidad;
         guardarsalto = velocidadsalto;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class vidas : MonoBehaviour {
     
@@ -46,7 +47,8 @@ public class vidas : MonoBehaviour {
         if (vidaactual > 3) { v4.SetActive(true); } else { v4.SetActive(false); }
         if (vidaactual > 4) { v5.SetActive(true); } else { v5.SetActive(false); }
         if (vidaactual > 5) { v6.SetActive(true); } else { v6.SetActive(false); }
-        if (vidaactual<1) { vidaactual = 3; Application.LoadLevel(level); }
+        if (vidaactual<1) { vidaactual = 3;  SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
+        //Application.LoadLevel(level);
         if (vidaactual>6) { vidaactual = 6; }
     }
 
