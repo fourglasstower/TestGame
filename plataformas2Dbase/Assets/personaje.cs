@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class personaje : MonoBehaviour {
+    public Vector3 scaleChange;
+    public GameObject dañoscolider;
+
     public static Vector3 posicionactual;
    public static float invulneravilidad = 0;
     public static float tiempoinmune = 1;
@@ -45,9 +48,9 @@ public class personaje : MonoBehaviour {
     float contadoragachada = 0;
 
     //plataforma
-    public string activadorplataforma = "no";
+    public static string activadorplataforma = "no";
     public GameObject posalreves, posnormal;
-    public string posactual = "normal";
+    public static string posactual = "normal";
     // Use this for initialization
 
     //fases
@@ -56,6 +59,9 @@ public class personaje : MonoBehaviour {
     float guardarsalto = 0;
     float guardararastrarse = 0;
     void Start () {
+        scaleChange = dañoscolider.transform.localScale;
+
+
         guardarvelocidad = velocidad;
         guardarsalto = velocidadsalto;
         guardararastrarse = velocidadagachada;
@@ -66,7 +72,8 @@ public class personaje : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         if (vidas.estado == "lento")
         { velocidad = guardarvelocidad / 2; }
             if (estadomomentanio == "normal") { if (vidas.estado == "lento") {  velocidadsalto = guardarsalto / 2; velocidadagachada = guardararastrarse / 2; estadomomentanio = "lento"; } }
@@ -283,7 +290,14 @@ public class personaje : MonoBehaviour {
         contadoragachada = contadoragachada + 1 * Time.deltaTime;
         if (Input.GetKey(KeyCode.S))
         {
-            if (instancia=="normal") { instancia = "abajo";  }
+            scaleChange.y = 3f;
+            dañoscolider.transform.localScale = scaleChange;
+            if (instancia=="normal")
+            {
+                instancia = "abajo";
+
+                
+            }
             if (instancia=="abajo")
             {
                 contadoragachada = 0; velocidad = velocidadagachada; activadoragachada = "si";
@@ -294,7 +308,13 @@ public class personaje : MonoBehaviour {
         {
             if (paredes.chekadorcolicion=="no")
             {
-                if (contadoragachada > 0.1f) { instancia = "normal"; velocidad = velocidadnormal; activadoragachada = "no"; }
+                
+                if (contadoragachada > 0.1f)
+                {
+                    instancia = "normal"; velocidad = velocidadnormal; activadoragachada = "no";
+                    scaleChange.y = 5.3f;
+                    dañoscolider.transform.localScale = scaleChange;
+                }
             }
             
         }

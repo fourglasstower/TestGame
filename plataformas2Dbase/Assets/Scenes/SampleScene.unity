@@ -2824,6 +2824,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 437886d4a3a832d42bbd58d0fc9856f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scaleChange: {x: 0, y: 0, z: 0}
+  "da\xF1oscolider": {fileID: 63348748}
   animator: {fileID: 1760567471}
   velocidad: 15
   velocidadagachada: 5
@@ -2841,16 +2843,14 @@ MonoBehaviour:
   altura: 0.35
   saltando: si
   caminando: no
-  colicionadorpos: {fileID: 0}
+  colicionadorpos: {fileID: 63348748}
   "da\xF1os": no
   instancia: normal
   accion: normal
   bala: {fileID: 1008901016387938, guid: fc427a9f228f06441a2bd262e7460a6b, type: 2}
   posbala: {fileID: 2071971702}
-  activadorplataforma: no
   posalreves: {fileID: 863808043}
   posnormal: {fileID: 613315125}
-  posactual: normal
 --- !u!65 &1402157933
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3506,6 +3506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aae1dd21d8b7d6440a6ea614e9d645cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  almass: 10
   alma: 0
   v1: {fileID: 2075307195}
   v2: {fileID: 413235125}
@@ -3513,6 +3514,7 @@ MonoBehaviour:
   v4: {fileID: 578745327}
   v5: {fileID: 1848752178}
   v6: {fileID: 1582745895}
+  vida: 3
   level: 1
   izquierda: {fileID: 453351339}
   derecha: {fileID: 1367846851}
@@ -3765,6 +3767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6507c1170f2f6f04caa52fe0ef7a537b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  segimimiento: si
   personaje: {fileID: 1402157931}
   velocidad: 4
   distancia: 0

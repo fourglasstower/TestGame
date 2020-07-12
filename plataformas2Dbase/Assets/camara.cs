@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class camara : MonoBehaviour {
     public static string seguir = "si";
+    public string segimimiento = "si";
     public GameObject personaje;
      float speed = 0;
     public float velocidad = 0;
@@ -12,7 +13,7 @@ public class camara : MonoBehaviour {
     Vector3 dir;
     // Use this for initialization
     void Start() {
-
+        seguir = segimimiento;
     }
 
     // Update is called once per frame

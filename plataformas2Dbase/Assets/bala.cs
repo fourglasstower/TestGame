@@ -27,7 +27,10 @@ public class bala : MonoBehaviour {
         {
             if (contador<2.9f) { contador = 3f; }
         }
-       
+        if (other.tag == "boss")
+        {
+            if (contador < 2.9f) { contador = 3f; }
+        }
 
     }
 }

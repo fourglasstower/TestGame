@@ -6,10 +6,12 @@ public class vidas : MonoBehaviour {
     
     public static string estado="normal";
     public static float almas=10;
+    public float almass = 10;
     public static float almastotales=0;
     public float alma;
     public GameObject v1, v2, v3, v4, v5,v6;
     public static int vidaactual = 3;
+    public int vida = 0;
     public int level=0;
     float contadoralmas=0;
     //enemigos
@@ -24,7 +26,8 @@ public class vidas : MonoBehaviour {
    public float valorrandom = 0;
     // Use this for initialization
     void Start () {
-        almas = 10;
+        vidaactual = vida;
+        almas = almass;
         iz = izquierda.transform.rotation;
         de = derecha.transform.rotation;
         scaleChange = barraalmas.transform.localScale;
